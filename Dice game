@@ -1,0 +1,140 @@
+#include<iostream>
+using namespace std;
+
+int turnScore = 0;
+int totalScoreA = 0;
+int totalScoreB = 0;
+void checkRoll(int die, int playerATurn, int playerBTurn) {
+	int sixTurn = 0;
+    char rollAgain = 'r' ;
+
+beginCheck :
+	if (die == 6) {
+		
+			if ((playerATurn == 1) && !(sixTurn == 2)) {
+				cout << "You rolled a SIX, roll again!!\n";
+				++sixTurn;
+				turnScore = die;
+				totalScoreA += turnScore;
+				cout << "Total score: " << totalScoreA << endl;
+				cin >> rollAgain;////listens for rollagain input
+				die = 1 + (rand() % 6);
+				goto beginCheck;
+
+			}
+			else if ((playerBTurn == 1) && !(sixTurn == 2))
+			{
+				cout << "You rolled a SIX, roll again!!\n";
+				++sixTurn;
+				turnScore = die;
+				totalScoreB += turnScore;
+				cout << "Total score: " << totalScoreB << endl;
+
+				cin >> rollAgain;
+				die = 1 + (rand() % 6); 
+
+				goto beginCheck;
+
+			}
+			else if ((sixTurn == 2) && ((playerBTurn == 1) || (playerATurn == 1)))
+			{
+				cout << "Now you're cheating!\n\n\n\n";
+			}
+
+	}
+
+	else if ((playerATurn == 1) && !(die == 6))
+	{
+		cout << "You rolled a: " << die;
+		turnScore = die;
+		totalScoreA += turnScore;
+		cout << " Your Total Score is: " << totalScoreA << "\n\n\n\n" << endl;
+	}
+	else if ((playerBTurn == 1) && (die != 6))
+	{
+		cout << "You rolled a: " << die;
+		turnScore = die;
+		totalScoreB += turnScore;
+		cout << " Your Total Score is: " << totalScoreB << "\n\n\n\n" << endl;
+
+	}
+}
+
+int playerAGameTurn() {
+	char choice;
+	int die = 0;
+	int playerATurn = 1;
+
+	while (playerATurn == 1) {
+	
+		cout << "Player 1 roll ([R] to roll, [Q] to quit)" << endl;
+		cin >> choice;
+		if (choice == 'r') {
+			die = 1 + (rand() % 6); 
+			checkRoll(die, playerATurn, 0);
+
+			playerATurn = 0;
+		}
+		else  if (choice == 'q') {
+			exit(EXIT_SUCCESS);
+		}
+	
+	}
+	return totalScoreA;		
+}
+
+int playerBGameTurn() {
+	char choice;
+	int die = 0;
+	int playerBTurn = 1;
+
+	while (playerBTurn == 1) {
+
+		cout << "Player 2 roll ([R] to roll, [Q] to quit)" << endl;
+		cin >> choice;
+		if (choice == 'r') {
+			die = 1 + (rand() % 6 ); 
+
+			checkRoll(die, 0, playerBTurn);
+
+			playerBTurn = 0;
+			}
+			else if (choice == 'q') {
+				exit(EXIT_SUCCESS); 
+			}
+		} 
+	return totalScoreB;
+	}
+	
+
+int main(){
+	char mainChoice;//for user input from main menu
+
+	cout << "Welcome to The Dice Game! Please select from the following menu: " << endl;//main menu
+	cout << "Press [p] to play, [q] to quit \n\n";//menu prompts
+
+	cin >> mainChoice;
+
+	if (mainChoice == 'p') {
+		while (totalScoreA < 100 || totalScoreB < 100)
+		{
+			
+			playerAGameTurn();
+			if (totalScoreA == 100) {
+				cout << "CONGRATULATIONS********* PLAYER 1 IS THE WINNER !! *********CONGRATULATIONS\n";
+				exit(EXIT_SUCCESS);
+			}
+
+			playerBGameTurn(); 
+			if (totalScoreB == 100) {
+				cout << "CONGRATULATIONS********* PLAYER 2 IS THE WINNER !! *********CONGRATULATIONS\n";
+				exit(EXIT_SUCCESS);
+			}
+		}
+	}
+	else if(mainChoice == 'q')
+	{
+		exit(EXIT_SUCCESS);
+	}	
+
+}
